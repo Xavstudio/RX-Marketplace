@@ -6,7 +6,7 @@ const products = [
         brand: "xiaomi",
         price: 5200000,
         specs: "12GB/256GB • Snapdragon 8 Gen 1 • Mulus 95%",
-        img: "https://i01.appmifile.com/webfile/globalimg/products/pc/xiaomi-12-pro/specs-header.png"
+        img: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&auto=format&fit=crop&q=80"
     },
     {
         id: 2,
@@ -14,7 +14,7 @@ const products = [
         brand: "google",
         price: 4500000,
         specs: "12GB/128GB • Google Tensor • IMEI Bea Cukai",
-        img: "https://lh3.googleusercontent.com/d-7hVvNf8jJkLqO_B9P0a"
+        img: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&auto=format&fit=crop&q=80"
     },
     {
         id: 3,
@@ -22,7 +22,7 @@ const products = [
         brand: "samsung",
         price: 4300000,
         specs: "8GB/256GB • Exynos 2100 • Resmi SEIN",
-        img: "https://images.samsung.com/is/image/samsung/p6pim/id/galaxy-s21/gallery/id-galaxy-s21-plus-5g-g996-371239-sm-g996bzvdxid-thumb-368339890"
+        img: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&auto=format&fit=crop&q=80"
     },
     {
         id: 4,
@@ -30,7 +30,7 @@ const products = [
         brand: "samsung",
         price: 5800000,
         specs: "8GB/128GB • Snapdragon 8 Gen 1 • Fullset SEIN",
-        img: "https://images.samsung.com/is/image/samsung/p6pim/id/2202/gallery/id-galaxy-s22-s901-sm-s901ezwdxid-thumb-530964727"
+        img: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&auto=format&fit=crop&q=80"
     },
     {
         id: 5,
@@ -38,7 +38,7 @@ const products = [
         brand: "samsung",
         price: 8200000,
         specs: "8GB/256GB • Snapdragon 8 Gen 2 • Mulus Like New",
-        img: "https://images.samsung.com/is/image/samsung/p6pim/id/2302/gallery/id-galaxy-s23-s911-sm-s911bzgbxid-thumb-534863345"
+        img: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&auto=format&fit=crop&q=80"
     },
     {
         id: 6,
@@ -46,7 +46,7 @@ const products = [
         brand: "sony",
         price: 1850000,
         specs: "4GB/64GB • Snapdragon 845 • OLED Curved",
-        img: "https://www.sony.co.id/image/738df9ea0b1b11f67f6b955c4d0b13ed?fmt=png-alpha&wid=440"
+        img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&auto=format&fit=crop&q=80"
     },
     {
         id: 7,
@@ -54,7 +54,7 @@ const products = [
         brand: "xiaomi",
         price: 7800000,
         specs: "12GB/512GB • Dimensity 9200+ • Kamera Leica",
-        img: "https://i02.appmifile.com/839_operator_sg/19/09/2023/15c54c344d9f66bb4f603c80be0a5a54.png"
+        img: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&auto=format&fit=crop&q=80"
     },
     {
         id: 8,
@@ -62,7 +62,7 @@ const products = [
         brand: "google",
         price: 5900000,
         specs: "8GB/128GB • Google Tensor G2 • Dual SIM",
-        img: "https://lh3.googleusercontent.com/97-4N6F9Zk"
+        img: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&auto=format&fit=crop&q=80"
     },
     {
         id: 9,
@@ -70,7 +70,7 @@ const products = [
         brand: "apple",
         price: 8500000,
         specs: "128GB • A15 Bionic • BH 88% iBox",
-        img: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-blue-select-2021"
+        img: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&auto=format&fit=crop&q=80"
     },
     {
         id: 10,
@@ -78,10 +78,182 @@ const products = [
         brand: "apple",
         price: 14200000,
         specs: "256GB • Dynamic Island • BH 91% Fullset",
-        img: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-finish-select-202209-6-7inch-deeppurple"
+        img: "https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?w=400&auto=format&fit=crop&q=80"
     }
 ];
 
 // STATE MANAGEMENT
 let cart = [];
 let currentUser = null;
+let currentBrand = 'all';
+
+// INITIALIZATION
+document.addEventListener("DOMContentLoaded", () => {
+    renderProducts(products);
+});
+
+// PAGE SWITCHING
+function switchPage(pageName) {
+    document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+
+    const targetSection = document.getElementById(`page-${pageName}`);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
+}
+
+// RENDER PRODUCTS
+function renderProducts(items) {
+    const container = document.getElementById('product-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (items.length === 0) {
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--gray-light);">Tidak ada produk yang ditemukan.</p>`;
+        return;
+    }
+
+    items.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card liquid-glass';
+        card.innerHTML = `
+            <span class="brand-tag">${product.brand}</span>
+            <img src="${product.img}" alt="${product.name}" class="product-img">
+            <div>
+                <h3 class="product-title">${product.name}</h3>
+                <p class="product-specs">${product.specs}</p>
+                <div class="product-price">Rp ${product.price.toLocaleString('id-ID')}</div>
+            </div>
+            <button class="add-btn" onclick="addToCart(${product.id})">Tambah ke Keranjang</button>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// FILTER BRAND
+function filterBrand(brand, element) {
+    currentBrand = brand;
+    document.querySelectorAll('.tag').forEach(tag => tag.classList.remove('active'));
+    if (element) {
+        element.classList.add('active');
+    }
+    filterProducts();
+}
+
+// FILTER SEARCH & BRAND
+function filterProducts() {
+    const searchInput = document.getElementById('search-input');
+    const query = searchInput ? searchInput.value.toLowerCase() : '';
+    
+    const filtered = products.filter(product => {
+        const matchesBrand = currentBrand === 'all' || product.brand === currentBrand;
+        const matchesSearch = product.name.toLowerCase().includes(query) || product.specs.toLowerCase().includes(query);
+        return matchesBrand && matchesSearch;
+    });
+    renderProducts(filtered);
+}
+
+// CART DRAWER TOGGLE
+function toggleCart() {
+    const drawer = document.getElementById('cart-drawer');
+    const overlay = document.getElementById('cart-overlay');
+    if (drawer && overlay) {
+        drawer.classList.toggle('open');
+        overlay.classList.toggle('open');
+    }
+}
+
+// ADD TO CART
+function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    if (product) {
+        cart.push(product);
+        updateCartUI();
+        toggleCart();
+    }
+}
+
+// REMOVE FROM CART
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCartUI();
+}
+
+// UPDATE CART UI
+function updateCartUI() {
+    const badge = document.getElementById('cart-count');
+    const itemsContainer = document.getElementById('cart-items');
+    const totalElement = document.getElementById('cart-total');
+
+    if (badge) badge.textContent = cart.length;
+    if (!itemsContainer) return;
+
+    itemsContainer.innerHTML = '';
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        total += item.price;
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+        itemDiv.innerHTML = `
+            <div>
+                <div class="cart-item-title">${item.name}</div>
+                <div class="cart-item-price">Rp ${item.price.toLocaleString('id-ID')}</div>
+            </div>
+            <button class="remove-btn" onclick="removeFromCart(${index})">Hapus</button>
+        `;
+        itemsContainer.appendChild(itemDiv);
+    });
+
+    if (totalElement) {
+        totalElement.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+    }
+}
+
+// CHECKOUT
+function checkout() {
+    if (cart.length === 0) {
+        alert("Keranjang belanja masih kosong!");
+        return;
+    }
+    alert("Terima kasih! Pesanan Anda berhasil diproses ke tahap pembayaran.");
+    cart = [];
+    updateCartUI();
+    toggleCart();
+}
+
+// AUTH MODAL TOGGLE
+function toggleAuthModal() {
+    const modal = document.getElementById('auth-modal');
+    if (modal) {
+        modal.classList.toggle('open');
+    }
+}
+
+// GOOGLE LOGIN SIMULATION
+function handleGoogleLogin() {
+    const emailInput = document.getElementById('user-email-input');
+    const email = emailInput ? emailInput.value : '';
+
+    if (!email || !email.includes('@')) {
+        alert("Masukkan email yang valid!");
+        return;
+    }
+
+    currentUser = email;
+    const username = email.split('@')[0];
+    
+    const authText = document.getElementById('auth-text');
+    if (authText) authText.textContent = username;
+
+    toggleAuthModal();
+    alert(`Berhasil masuk sebagai ${email}`);
+}
