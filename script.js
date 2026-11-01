@@ -39,7 +39,8 @@ const translations = {
     btn_publish: "Tayangkan Produk",
     add_to_cart: "Beli Sekarang",
     stock_label: "Stok",
-    seller_label: "Toko"
+    seller_label: "Toko",
+    empty_products: "Belum ada produk di RX Market. Silakan tambahkan produk baru melalui tombol '+ Tambah Produk Toko'!"
   },
   en: {
     search_placeholder: "Search your dream products...",
@@ -70,49 +71,13 @@ const translations = {
     btn_publish: "Publish Product",
     add_to_cart: "Add to Cart",
     stock_label: "Stock",
-    seller_label: "Seller"
+    seller_label: "Seller",
+    empty_products: "No products in RX Market yet. Click '+ Add Store Item' to list your product!"
   }
 };
 
-// Initial Mock Products
-let products = [
-  {
-    id: 1,
-    name: "Wireless Noise-Canceling Headphones",
-    price: 3499000,
-    discount: 15,
-    stock: 12,
-    condition: "Baru",
-    seller: "TechCentral",
-    variants: ["Matte Black", "Silver", "Navy Blue"],
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
-    desc: "Suara jernih dengan peredam bising aktif premium. Baterai tahan hingga 30 jam."
-  },
-  {
-    id: 2,
-    name: "Smart Watch Series X - Glass Edition",
-    price: 4899000,
-    discount: 0,
-    stock: 5,
-    condition: "Bekas (Like New)",
-    seller: "iStore Official",
-    variants: ["40mm Silver", "44mm Black"],
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
-    desc: "Layar OLED selalu aktif, sensor detak jantung presisi tinggi dan GPS terintegrasi."
-  },
-  {
-    id: 3,
-    name: "Mechanical Keyboard RGB Custom",
-    price: 1250000,
-    discount: 10,
-    stock: 20,
-    condition: "Baru",
-    seller: "KeyCraft ID",
-    variants: ["Blue Switch", "Red Switch", "Brown Switch"],
-    image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
-    desc: "Keyboard mekanikal ergonomis dengan lampu RGB berkilau dan keycaps PBT berkualitas."
-  }
-];
+// Initial Products set to empty as requested
+let products = [];
 
 // DOM Elements
 const productGrid = document.getElementById('productGrid');
@@ -146,7 +111,11 @@ document.addEventListener('DOMContentLoaded', () => {
 function renderProducts(items) {
   productGrid.innerHTML = '';
   if (items.length === 0) {
-    productGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Tidak ada produk ditemukan.</p>`;
+    productGrid.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px; color: var(--text-muted);">
+        <i class="fa-solid fa-box-open" style="font-size: 3rem; margin-bottom: 12px; display: block; opacity: 0.6;"></i>
+        <p>${translations[currentLang].empty_products}</p>
+      </div>`;
     return;
   }
 
@@ -159,6 +128,9 @@ function renderProducts(items) {
         <img src="${prod.image}" alt="${prod.name}">
         ${prod.discount > 0 ? `<span class="discount-tag">-${prod.discount}%</span>` : ''}
         <span class="condition-tag">${prod.condition}</span>
+        <button class="delete-prod-btn" onclick="deleteProduct(${prod.id})" title="Hapus Produk">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
       </div>
       <div class="product-info">
         <span class="product-seller"><i class="fa-solid fa-store"></i> ${prod.seller}</span>
@@ -183,6 +155,15 @@ function renderProducts(items) {
     `;
     productGrid.appendChild(card);
   });
+}
+
+// Delete Product Functionality
+function deleteProduct(productId) {
+  const confirmMsg = currentLang === 'id' ? 'Apakah Anda yakin ingin menghapus produk ini?' : 'Are you sure you want to delete this product?';
+  if (confirm(confirmMsg)) {
+    products = products.filter(p => p.id !== productId);
+    renderProducts(products);
+  }
 }
 
 // Add to Cart Logic
